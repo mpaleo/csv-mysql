@@ -58,74 +58,102 @@ csv-mysql
 
 
 ## Installation
-    npm install csv-mysql --save
+```bash
+npm install csv-mysql --save
+```
 
 ## Usage
-	var cm = require('csv-mysql');
+```javascript
+var cm = require('csv-mysql');
 
-	var data = '"c1","c2","c3"\n"1","2","3"\n"4","5","6"';
-	var options = {
-		mysql: {
-			host: '127.0.0.1',
-			user: 'root',
-			database: 'test',
-		},
-		csv: {
-			comment: '#',
-			quote: '"'
-		},
-		table: 'test'
-	}
+var data = '"c1","c2","c3"\n"1","2","3"\n"4","5","6"';
+var options = {
+	mysql: {
+		host: '127.0.0.1',
+		user: 'root',
+		database: 'test',
+	},
+	csv: {
+		comment: '#',
+		quote: '"'
+	},
+	table: 'test'
+}
 
-	cm.import(options, data, function(err, txt){
-		if( err )
-			console.log(err+": "+txt);
-		else
-			console.log("Import completed");
-	});
+cm.import(options, data, function(err, txt){
+	if( err )
+		console.log(err+": "+txt);
+	else
+		console.log("Import completed");
+});
+```
 
 ## Sample 2
-	//adding additional column to every row (which is not part of input csv)
-	// equivalent of
-	// var data = '"c1","c2","c3","c4"\n"1","2","3","111"\n"4","5","6","111"';
-	//
-	var data = '"c1","c2","c3"\n"1","2","3"\n"4","5","6"';
-	options.fixedData = {
-		c4: "111"
-	};
-	cm.import(options, data, function(err, txt){
-		if( err )
-			console.log(err+": "+txt);
-		else
-			console.log("Import completed");
-	});
+```javascript
+// adding additional column to every row (which is not part of input csv)
+// equivalent of
+// var data = '"c1","c2","c3","c4"\n"1","2","3","111"\n"4","5","6","111"';
+var data = '"c1","c2","c3"\n"1","2","3"\n"4","5","6"';
+options.fixedData = {
+	c4: "111"
+};
+cm.import(options, data, function(err, txt){
+	if( err )
+		console.log(err+": "+txt);
+	else
+		console.log("Import completed");
+});
+```
 
 
 ## Sample 3
-	//data without header
-	//
-	var cm = require('csv-mysql');
-	var data = '"1","2","3"\n"4","5","6"';
-	var options = {
-		mysql: {
-			host: '127.0.0.1',
-			user: 'root',
-			database: 'test',
-		},
-		csv: {
-			comment: '#',
-			quote: '"'
-		},
-		table: 'test',
-		headers: ["c1","c2","c3"]
-	}
+```javascript
+// data without header
+var cm = require('csv-mysql');
+var data = '"1","2","3"\n"4","5","6"';
+var options = {
+	mysql: {
+		host: '127.0.0.1',
+		user: 'root',
+		database: 'test',
+	},
+	csv: {
+		comment: '#',
+		quote: '"'
+	},
+	table: 'test',
+	headers: ["c1","c2","c3"]
+}
 
-	cm.import(options, data, function(err, txt){
-		if( err )
-			console.log(err+": "+txt);
-		else
-			console.log("Import completed");
-	});
+cm.import(options, data, function(err, txt){
+	if( err )
+		console.log(err+": "+txt);
+	else
+		console.log("Import completed");
+});
+```
+
+## Sample 4
+```javascript
+// example to allow null values
+// more info at https://csv.js.org/parse/options/
+...
+
+var data = '"c1","c2","c3"\n"1","NULL","3"\n"4","5","NULL"';
+
+var options = {
+	mysql: {...},
+	csv: {
+		...
+		cast: function(value, context) {
+			return value === 'NULL' ? null : value;
+		}
+	},
+	table: '...'
+};
+
+...
+```
 
 ## Bug Report
    Please open an [issue](https://github.com/rajaru/csv-mysql/issues) .

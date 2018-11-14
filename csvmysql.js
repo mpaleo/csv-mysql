@@ -19,7 +19,7 @@
 
  /* jshint node: true */
 'use strict';
-var csv     = require('csv');
+var parse   = require('csv-parse');
 var mysql 	= require('./dbmysql.js');
 
 
@@ -105,7 +105,7 @@ CsvMysql.prototype.import = function(data, callback){
 
 		for(var i=0; i<cols.length; i++)cols[i] = cols[i].toLowerCase();
 		_self.columns = cols;
-		csv.parse(data, _self.options.csv, function(err, rows){
+		parse(data, _self.options.csv, function(err, rows){
 			if( err )return callback(err, err);
 			var header = _self.options.headers || rows.shift();
 			for(var i=0; i<header.length; i++)header[i] = header[i].toLowerCase();
